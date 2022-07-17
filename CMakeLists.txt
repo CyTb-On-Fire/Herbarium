@@ -3,4 +3,4 @@ project(Herbarium)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Herbarium main.cpp)
+add_executable(Herbarium main.cpp Dictionary.cpp Dictionary.h)
