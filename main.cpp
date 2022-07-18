@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <windows.h>
 
 std::string family[8][2] = {{"злаковые", "0"},
                             {"бобовые", "1"},
@@ -38,14 +39,14 @@ int current[9][2] = {
 
 /*
  * required flowers for each type
- злаковые - 4
- бобовые - 4
- лелейные - 3
- крестоцветные - 4
- розоцветные - 4
- пасленовые - 3
- сложноцветные - 4
- лютиковые - 3
+ Р·Р»Р°РєРѕРІС‹Рµ - 4
+ Р±РѕР±РѕРІС‹Рµ - 4
+ Р»РµР»РµР№РЅС‹Рµ - 3
+ РєСЂРµСЃС‚РѕС†РІРµС‚РЅС‹Рµ - 4
+ СЂРѕР·РѕС†РІРµС‚РЅС‹Рµ - 4
+ РїР°СЃР»РµРЅРѕРІС‹Рµ - 3
+ СЃР»РѕР¶РЅРѕС†РІРµС‚РЅС‹Рµ - 4
+ Р»СЋС‚РёРєРѕРІС‹Рµ - 3
  **required
  */
 
@@ -109,7 +110,7 @@ void printCurrentHerb(std::string file = "herb_data.txt"){
         return;
     }
     else
-        std::cout << "Your current collection includes:" << std::endl;
+        std::cout << "Your current collection includes:\n" << std::endl;
     std::string buffer;
     do {
         getline(reader, buffer, '\n');
@@ -173,11 +174,14 @@ void checkAndPrint(){
 }
 
 int main() {
-    std::cout << "\t-==Welcome to the Herbarium 2.0!==-\n"
-    << "If you want to enter selection mode input 'change'\n"
-    "If you want to check your plants collection input 'check'\n"
-    "Type 'close' to exit Herbarium 2.0"
-    << std::endl;
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    std::cout << "\t-==Welcome to the Herbarium 2.0!==-\n\n\n"
+              << "If you want to enter selection mode input 'change'\n"
+                 "If you want to check your plants collection input 'check'\n"
+                 "If you want to see your current collection type 'collection'\n\n"
+                 "Type 'close' to exit Herbarium 2.0"
+              << std::endl;
     std::string command;
     while(true) {
         std::cin >> command;
@@ -194,7 +198,14 @@ int main() {
                 if (command == "back"){
                     break;
                 }
-                std::string* words = split(command,':');
+                std::string* words;
+                try {
+                    words = split(command,':');
+                }
+                catch (std::exception ex){
+                    std::cout << "Incorrect input. Type plant in format ['plant_name:plant_id']" << std::endl;
+                    continue;
+                }
                 try {
                     add_plant(words[0], std::stoi(words[1]));
                 }
@@ -207,10 +218,13 @@ int main() {
             checkAndPrint();
         } else if (command == "close") {
             break;
-        } else {
+        } else if (command == "collection"){
+            printCurrentHerb();
+        }
+        else {
             std::cout << "unknown command" << std::endl;;
         }
     }
-    setlocale(LC_ALL, "rus");
+
     return 0;
 }
